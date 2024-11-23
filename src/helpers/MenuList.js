@@ -60,7 +60,7 @@ export const MenuList = [
         id: 2,
         name: "Do średnich  patelni (25 cm)",
         image: Img_2,
-        price: 34,
+        price: 33,
 
         orange: orange_2,
         red: red_2,
@@ -81,7 +81,7 @@ export const MenuList = [
         id: 3,
         name: "Do średnich patelni (28 cm)",
         image: Img_3,
-        price: 39,
+        price: 36,
 
         orange: orange_3,
         red: red_3,
@@ -102,7 +102,7 @@ export const MenuList = [
         id: 4,
         name: "Do dużych  patelni (30 cm)",
         image: Img_4,
-        price: 44,
+        price: 39,
 
         orange: orange_4,
         red: red_4,
@@ -124,7 +124,7 @@ export const MenuList = [
         id: 5,
         name: "Do dużych patelni (32,5 cm)",
         image: Img_5,
-        price: 49,
+        price: 42,
 
         orange: orange_5,
         red: red_5,
