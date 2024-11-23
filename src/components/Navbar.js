@@ -6,27 +6,43 @@ function Navbar() {
     const [quantity, setQuantity] = useState(0);
 
     useEffect(() => {
+        // Set up the interval
         const interval = setInterval(() => {
             let totalSum = 0;
             let totalQuantity = 0;
-
-            for (let i = 1; i <= 100; i++) {
-                const sum = sessionStorage.getItem(`sum-${i}`);
-                const qty = sessionStorage.getItem(`quantity-${i}`);
-
-                if (sum && qty) {
-                    totalSum += parseFloat(sum);
-                    totalQuantity += parseInt(qty);
-
-                    sessionStorage.setItem("totalSum", totalSum);
-                    sessionStorage.setItem(`totalQuantity`, totalQuantity);
+    
+            const colors = ["Czerwony", "Pomarańczowy", "Zielony", "Szary", "Czarny", "Niebieski"];
+    
+            // Loop through each color
+            colors.forEach((color) => {
+                // Loop through item IDs (1 to 100)
+                for (let i = 1; i <= 100; i++) {
+                    const sum = sessionStorage.getItem(`sum-${color}-${i}`);
+                    const qty = sessionStorage.getItem(`quantity-${color}-${i}`);
+    
+                    // If both sum and quantity are found, accumulate the values
+                    if (sum && qty) {
+                        totalSum += parseFloat(sum);
+                        totalQuantity += parseInt(qty);
+                    }
                 }
-            }
-
+            });
+    
+            // Set the accumulated values to sessionStorage once at the end
+            sessionStorage.setItem("totalSum", totalSum);
+            sessionStorage.setItem("totalQuantity", totalQuantity);
+    
+            // Update state only after all calculations
             setStoredSum(totalSum);
             setQuantity(totalQuantity);
-        }, 100);
-    }, []); // Run only once when the component is mounted
+    
+        }, 200); // The interval is set to 1000ms (1 second)
+    
+        // Clean up the interval when the component is unmounted
+        return () => clearInterval(interval);
+    
+    }, []); // Empty dependency array means this runs only once on mount
+    
 
     function scrollToTop() {
         window.scrollTo(0, 0);
@@ -66,17 +82,17 @@ function Navbar() {
 
                     maxHeight: "60px", // Corrected camelCase property name
                     minWidth: "60px",
-                    backgroundColor: "hsla(0, 0%, 0%, 0.5)", // Corrected camelCase property name
-                    boxShadow: "1px 1px 20px 5px black", // Corrected camelCase property name
+                    backgroundColor: "orange", // Corrected camelCase property name
+                    boxShadow: "1px 1px 20px 2px black", // Corrected camelCase property name
                     fontSize: "15px", // Corrected camelCase property name
                 }}
-                className=" m-0 p-1 ps-3 pe-3 col-auto text-center bg-primary rounded d-flex align-items-center justify-content-center text-white fw-bold border-0"
+                className=" m-0 p-1 ps-3 pe-3 col-auto text-center rounded d-flex align-items-center justify-content-center text-white fw-bold border-0"
             >
                 Darmowa Dostawa!
             </div>
 
             <Link
-                className="o_btn_nav d-flex justify-content-center border-bottom border-2 rounded"
+                className="o_btn_nav d-flex justify-content-center rounded"
                 style={{ minWidth: "60px" }}
                 to="/Sklep/Koszyk"
                 onClick={scrollToTop}

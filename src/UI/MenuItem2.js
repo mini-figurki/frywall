@@ -18,41 +18,57 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
     useEffect(() => {
         const newSum = price * itemQuantity;
         setItemSum(newSum);
-
-        sessionStorage.setItem(`quantity-${id}`, itemQuantity);
-        sessionStorage.setItem(`sum-${id}`, newSum);
-    }, [itemQuantity, price, id]);
+    
+        const colors = ["Czerwony", "Pomarańczowy", "Zielony", "Szary", "Czarny", "Niebieski"];
+    
+        colors.forEach((color) => {
+            // Get the stored image for this color and item
+            const storedImage = sessionStorage.getItem(`image-${color}-${id}`);
+    
+            // Only update sessionStorage if the stored image matches the current image
+            if (storedImage === image) {
+                // Update the quantity and sum for the matching color and item
+                sessionStorage.setItem(`quantity-${color}-${id}`, itemQuantity);
+                sessionStorage.setItem(`sum-${color}-${id}`, newSum);
+            }
+        });
+    }, [itemQuantity, price, id, image]);
+    
 
     const increment = () => setItemQuantity((prev) => prev + 1);
     const decrement = () =>
         setItemQuantity((prev) => (prev > 1 ? prev - 1 : prev));
 
     const handleDelete = () => {
-        // Loop through the keys and remove them from sessionStorage
-        [
-            "id",
-            "image",
-            "name",
-            "price",
-            "sum",
-            "quantity",
-            "text",
-            "height",
-            "material",
-            "ruch",
-            "acsesoria",
-            "producent",
-        ].forEach((key) => {
-            sessionStorage.removeItem(`${key}-${id}`); // Remove each key for the specific id
-        });
+        // const colors = ["Czerwony", "Pomarańczowy", "Zielony", "Szary", "Czarny", "Niebieski"];
+    
+        // // Loop through each color and remove associated keys from sessionStorage
+        // colors.forEach((color) => {
+        //     ["id", "image", "name", "price", "sum", "quantity"].forEach((key) =>
+        //         sessionStorage.removeItem(`${key}-${color}-${id}`)
+        //     );
+        // });
 
         // Set the total values to 0 after deleting the item
         sessionStorage.setItem("totalSum", 0);
         sessionStorage.setItem("totalQuantity", 0);
 
-        onItemDelete(id); // Notify parent to remove the item
+        onItemDelete(id, image); // Notify parent to remove the item
     };
 
+    // const handleDelete = (selectedColor) => {
+    //     // Remove associated keys for the chosen color from sessionStorage
+    //     ["id", "image", "name", "price", "sum", "quantity"].forEach((key) => {
+    //         const storageKey = `${key}-${selectedColor}-${id}`;
+    //         if (sessionStorage.getItem(storageKey)) {
+    //             sessionStorage.removeItem(storageKey);
+    //         }
+    //     });
+    
+    //     // Optionally, you can update the parent's state if necessary
+    //     onItemDelete(id); // Notify parent to remove the item
+    // };
+    
     function scrollToTop() {
         window.scrollTo(0, 0);
     }
@@ -68,14 +84,15 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                 position: "relative",
                 boxShadow: "1px 1px 50px black",
                 margin: "15px",
+                border: '3px solid orange'
             }}
-            className="o_towar p-0 rounded"
+            className=" p-0 rounded"
         >
             <div
                 style={{ backgroundColor: "hsla(0, 0%, 0%, 0.25)" }}
                 className="rounded"
             >
-                <Link
+                <div
                     className="m-0 p-0 rounded"
                     onClick={scrollToTop}
                     to={{
@@ -116,9 +133,9 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                     }}
                 >
                     {" "}
-                </Link>
+                </div>
 
-                <Link
+                <div
                     className="m-0 p-0 rounded"
                     onClick={scrollToTop}
                     to={{
@@ -160,7 +177,7 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                         alt={name}
                         className="m-0 p-0 rounded"
                     />
-                </Link>
+                </div>
                 
 
                     <p
@@ -177,27 +194,7 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                     className="m-0 p-0 rounded-end rounded-pill rounded-bottom-0"
                 >
                </p>
-                <p
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: "150px",
-                        zIndex: 995,
-                        fontSize: "24px",
-                        color: "white",
-                        height: "45px",
-                        fontStyle: "italic",
-                        backgroundColor: "hsla(0, 0%, 0%, 0.25)",
-
-                        textShadow:
-                            "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
-                    }}
-                    className="m-0 p-1 ps-2 pe-2 fw-bold d-flex align-items-center rounded"
-                >
-                    {name}
-                </p>
-
-                <div
+               <div
                     style={{
                         right: 0,
                         top: 0,
@@ -207,8 +204,9 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                         height: "45px",
                         minWidth: "30px",
                         minHeight: "30px",
+                        zIndex: '777'
                     }}
-                    className="o_btn_nav m-0 p-0 col fw-bold d-flex justify-content-center align-items-center border-top-0 border-end-0 rounded rounded-top-0 rounded-end-0"
+                    className="o_btn_nav m-0 p-0 col fw-bold d-flex justify-content-center align-items-center  rounded rounded-top-0 rounded-end-0"
                     onClick={handleDelete}
                     aria-label={`Delete ${name}`}
                 >
@@ -225,6 +223,64 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                     </svg>
                 </div>
 
+                <div
+                    className="m-0 p-0 rounded"
+                    onClick={scrollToTop}
+                    to={{
+                        pathname: "/Sklep/Towar", // The path you want to navigate to
+                        search: `?image=${encodeURIComponent(
+                            image
+                        )}&name=${encodeURIComponent(
+                            name
+                        )}&price=${encodeURIComponent(
+                            price
+                        )}&id=${encodeURIComponent(
+                            id
+                        )}&increment=${encodeURIComponent(
+                            increment
+                        )}&decrement=${encodeURIComponent(
+                            decrement
+                        )}&text=${encodeURIComponent(
+                            text
+                        )}&height=${encodeURIComponent(
+                            height
+                        )}&material=${encodeURIComponent(
+                            material
+                        )}&ruch=${encodeURIComponent(
+                            ruch
+                        )}&acsesoria=${encodeURIComponent(
+                            acsesoria
+                        )}&producent=${encodeURIComponent(producent)}`,
+                    }}
+                >
+                    {" "}
+                   
+                    <p
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: "150px",
+                        zIndex: 995,
+                        fontSize: "18px",
+                        color: "white",
+                        minHeight: "45px",
+                        fontStyle: "italic",
+                        backgroundColor: "hsla(0, 0%, 0%, 0.25)",
+                        width: '160px',
+                        textShadow: "1px 1px 5px black",
+
+                        // textShadow:
+                        //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                    }}
+                    className="m-0 p-1 ps-2 pe-2 fw-bold d-flex align-items-center rounded"
+                >
+                    {name}
+                </p>
+                </div>
+                
+
+                
+
                 <Quantity
                     left="150px"
                     top="106px"
@@ -237,15 +293,16 @@ function MenuItem2({ id, image, name, price, sum, quantity, onItemDelete }) {
                     style={{
                         position: "absolute",
                         right: "0px",
-                        bottom: "50px",
+                        bottom: "0px",
                         zIndex: 995,
                         fontSize: "24px",
                         color: "white",
                         height: "45px",
                         fontStyle: "italic",
-                        backgroundColor: "hsla(0, 0%, 0%, 0.25)",
-                        textShadow:
-                            "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                        backgroundColor: "hsla(0, 0%, 0%, 0.25)",                        textShadow: "1px 1px 5px black",
+
+                        // textShadow:
+                        //     "1px 1px 50px black, ",
                     }}
                     className=" m-0 p-1 ps-2 pe-3 fw-bold d-flex justify-content-center align-items-center rounded"
                 >

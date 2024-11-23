@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Quantity from "./Quantity";
 import { Link } from "react-router-dom";
 
-function MenuItem({ id, image, name, price, text, height, material, ruch, acsesoria, producent }) {
+function MenuItem({ id, image, name, price, text, height, material, ruch, acsesoria, producent, orange, red, black, green, gray, blue}) {
     const [quantity, setQuantity] = useState(1);
     const [sum, setSum] = useState(price);
 
@@ -121,10 +120,10 @@ function MenuItem({ id, image, name, price, text, height, material, ruch, acseso
             >
                 <div
                     style={{
-                        maxWidth: "360px",
+                        maxWidth: "320px",
                         width: "100%",
                         backdropFilter: "blur(1px)",
-                        boxShadow: "1px 1px 50px black",
+                        boxShadow: "1px 1px 30px black",
                         // margin: "15px",
                     }}
                     className=" p-0 col-auto d-flex justify-content-center rounded"
@@ -178,6 +177,18 @@ function MenuItem({ id, image, name, price, text, height, material, ruch, acseso
                             acsesoria
                         )}&producent=${encodeURIComponent(
                             producent
+                        )}&orange=${encodeURIComponent(
+                            orange
+                        )}&red=${encodeURIComponent(
+                            red
+                        )}&black=${encodeURIComponent(
+                            black
+                        )}&green=${encodeURIComponent(
+                            green
+                        )}&gray=${encodeURIComponent(
+                            gray
+                        )}&blue=${encodeURIComponent(
+                            blue
                         )}
                         `,
                     }}
@@ -188,18 +199,17 @@ function MenuItem({ id, image, name, price, text, height, material, ruch, acseso
                         className="m-0 p-0 o_towar rounded"
                         alt={name}
                     />
-                </Link>
 
-                        <p
+<p
                             style={{
-                                fontSize: "24px",
+                                fontSize: "21px",
                                 color: "white",
                                 position: "absolute",
                                 left: "0px",
-                                top: '0px',
-                                height: "45px",
-                                backgroundColor: "hsla(0, 0%, 0%, 0.5)",
-                                backdropFilter: "blur(5px)",
+                                bottom: '0px',
+                                minHeight: "45px",
+                                backgroundColor: "orange",
+                                // backdropFilter: "blur(5px)",
                                 fontStyle: "italic",
                             }}
                             className="m-0 p-0 ps-3 pe-3 col-auto d-flex align-items-center fw-bold rounded"
@@ -209,31 +219,34 @@ function MenuItem({ id, image, name, price, text, height, material, ruch, acseso
 
                         <p
                             style={{
-                                fontSize: "24px",
+                                fontSize: "27px",
                                 color: "white",
                                 position: "absolute",
-                                bottom: "0px",
+                                top: "0px",
                                 right: "0px",
-                                backgroundColor: "hsla(0, 0%, 0%, 0.5)",
-                                backdropFilter: "blur(5px)",
+                                backgroundColor: "orange",
+                                // backdropFilter: "blur(5px)",
                                 height: "45px",
                                 fontStyle: "italic",
                             }}
-                            className="m-0 p-1 ps-3 pe-3 col-auto fw-bold d-flex align-items-center justify-content-end rounded"
+                            className="m-2 p-0 ps-3 pe-3 col-auto fw-bold d-flex align-items-center justify-content-end rounded"
                         >
-                            {sum} zł
+                            {price} zł
                         </p>
+                </Link>
 
-                        <div style={{ height: "0px" }}>
+                      
+
+                        {/* <div style={{ height: "0px" }}>
                             <Quantity
                                 left="0vh"
                                 quantity={quantity} // Use the state `quantity` here
                                 increment={increment}
                                 decrement={decrement}
                             />
-                        </div>
+                        </div> */}
 
-                        <div
+                        {/* <div
                             style={{
                                 right: "0",
                                 top: "0",
@@ -255,7 +268,7 @@ function MenuItem({ id, image, name, price, text, height, material, ruch, acseso
                             >
                                 <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z" />
                             </svg>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

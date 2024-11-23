@@ -72,9 +72,10 @@ function Form({ img }) {
                 style={{
                     backdropFilter: "blur(25px)",
                     // backgroundColor: "hsla(0, 0%, 0%, 0.25)",
-                    width: "100vw",
+                    width: "100vw",                     borderTop: "6px solid orange",
+
                 }}
-                className="m-0 p-0 text-white row justify-content-around align-items-center border-top border-2 border-primary"
+                className="m-0 p-0 text-white row justify-content-around align-items-center"
             >
                 <div
                     style={{ height: "25px", minWidth: "360px" }}
@@ -131,7 +132,7 @@ function Form({ img }) {
                                 key={index}
                                 style={{
                                     height: "60px",
-                                    backgroundColor: "hsla(0, 0%, 0%, 0.5)",
+                                    backgroundColor: "hsla(0, 0%, 0%, 0.3)",
                                     maxWidth: "360px",
                                     width: "100%",
                                     margin: " 5px",
@@ -143,8 +144,9 @@ function Form({ img }) {
                                         // backgroundColor: "hsla(0, 0%, 0%, 0.25) ",
                                         fontSize: "15px",
                                         fontStyle: "italic",
+                                        border: "3px solid orange",
                                     }}
-                                    className="m-0 ps-3 pe-3 col-auto d-flex align-items-center border border-2 border-primary rounde border-end-0"
+                                    className="m-0 ps-3 pe-3 col-auto d-flex align-items-center  rounde border-end-0"
                                 >
                                     {field.label}:
                                 </p>
@@ -152,9 +154,10 @@ function Form({ img }) {
                                     style={{
                                         outline: "none",
                                         fontSize: "18px",
-                                        boxShadow: "1px 1px 50px black",
-                                        textShadow:
-                                            "1px 1px 10px black, 1px 1px 30px  black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black",
+                                        boxShadow: "1px 1px 50px black",                        textShadow: "1px 1px 5px black",
+
+                                        // textShadow:
+                                        //     "1px 1px 10px black, 1px 1px 30px  black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black",
                                     }}
                                     className="m-0 p-0 ps-3 col d-flex flex-column justify-content-center text-start bg-transparent text-white rounded-end"
                                     value={field.value}
@@ -193,9 +196,9 @@ function Form({ img }) {
                         >
                             {sessionStorage.getItem("totalSum") === "0" &&
                             !isFormValid()
-                                ? "Wybierz Figurku i Uzupelnij pola formy!"
+                                ? "Wybierz towar i Uzupelnij pola formy!"
                                 : sessionStorage.getItem("totalSum") === "0"
-                                ? "Wybierz Figurku!"
+                                ? "Wybierz towar!"
                                 : !isFormValid()
                                 ? "Uzupelnij wszystkie pola formy!"
                                 : null}
@@ -207,13 +210,13 @@ function Form({ img }) {
                         style={{
                             width: "100%",
                             maxWidth: "360px",
-                            boxShadow: "1px 15px 60px black",
+                            // boxShadow: "1px 15px 60px black",
                             minHeight: "60px",
                         }}
                         className={`o_btn_nav ms-auto me-auto p-1 ps-3 pe-3 m-0 rounded ${
                             !isFormValid() ||
                             sessionStorage.getItem("totalSum") == 0
-                                ? "border-primary pe-none"
+                                ? "border-0 pe-none"
                                 : ""
                         }`}
                         data-bs-toggle="modal"

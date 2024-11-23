@@ -3,11 +3,12 @@ import React from "react";
 function Banner({ title, img }) {
     return (
         <div
-            className="m-0 p-0 border-bottom border-2 border-primary"
+            className="m-0 p-0  "
             style={{
                 position: "relative",
                 width: "100%",
                 height: "50vh",
+                borderBottom: '6px solid orange',
             }}
         >
             <a
@@ -43,10 +44,11 @@ function Banner({ title, img }) {
                     textDecoration: "none",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    textShadow: "1px 1px 10px black, 1px 1px 30px black",
+                    justifyContent: "center",                        textShadow: "1px 1px 5px black",
+
+                    // textShadow: "1px 1px 10px black, 1px 1px 30px black",
                     boxShadow: "1px 1px 30px black",
-                    border: "4px solid var(--bs-primary)",
+                    border: "6px solid orange",
                     backdropFilter: "blur(5px)",
                     backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                     // width: '360px',

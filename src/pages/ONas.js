@@ -3,7 +3,7 @@ import React from "react";
 import Banner from "../components/Banner";
 import ONas2 from "../components/ONas2";
 
-import img_1 from "../image/bg_3.png";
+import img_1 from "../image/bg_3.jpg";
 
 
 function ONas() {

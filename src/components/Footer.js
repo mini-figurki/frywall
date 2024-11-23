@@ -10,10 +10,12 @@ function Footer() {
 
     return (
         <div
-            className="m-0 p-0 border-top border-2 border-primary"
+            className="m-0 p-0 "
             style={{
                 position: "relative",
                 width: "100%",
+                borderTop: '6px solid orange',
+
                 // height: "420px",
                 backgroundImage: `url(${Banner_img_3})`, // Correct way to use a variable for background image
                 backgroundSize: "cover", // Make sure the image covers the div properly

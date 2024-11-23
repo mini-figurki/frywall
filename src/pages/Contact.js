@@ -3,7 +3,7 @@ import React from "react";
 import Banner from "../components/Banner";
 import Contact2 from "../components/Contact2";
 
-import img_1 from "../image/bg_4.png";
+import img_1 from "../image/bg_2.jpg";
 
 
 function Contact() {

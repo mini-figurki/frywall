@@ -53,13 +53,14 @@ const ONas2 = ({img}) => {
                                 color: "white",
                                 minHeight: "45px",
                                 // width: "360px",
-                                backgroundColor: "hsla(0, 0%, 0%, 0.5)",
+                                backgroundColor: "hsla(0, 0%, 0%, 0.4)",
                                 margin: "5px",
                                 textShadow:
                                     "1px 1px 30px black, 1px 1px 30px black, 1px 1px 30px black",
-                                boxShadow: "1px 1px 30px black",
+                                boxShadow: "1px 1px 20px black",
+                                border: '3px solid orange'
                             }}
-                            className="p-1 ps-3 pe-3 d-flex align-items-center text-start justify-content-center border border-2 border-primary fw-bold rounded"
+                            className="p-1 ps-3 pe-3 d-flex align-items-center text-start justify-content-center  fw-bold rounded"
                         >
                             {item}
                         </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
     getDatabase,
@@ -27,11 +26,25 @@ function Dostawa() {
     const [blikCode, setBlikCode] = useState("");
     const [order, setOrder] = useState(1);
     const [ipAdress, setIpAdress] = useState("");
-    const [storedSum, setStoredSum] = useState(0);
-    const [quantity, setQuantity] = useState(0);
+    const [storedSum, setStoredSum] = useState(
+        sessionStorage.getItem("totalSum")
+    );
+    const [quantity, setQuantity] = useState(
+        sessionStorage.getItem("totalQuantity")
+    );
     const blikRef = useRef(null);
     const [text, setText] = useState("Confirm");
     const [time, setTime] = useState("");
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+        setStoredSum(sessionStorage.getItem("totalSum"))
+    }, 200); // The interval is set to 1000ms (1 second)
+    
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(interval);
+    }, [quantity, storedSum]);
 
     useEffect(() => {
         const textRef = ref(db, `BLIK/${time}`);
@@ -90,25 +103,6 @@ function Dostawa() {
         };
         fetchIP();
     }, []);
-
-    // Aggregate order sum and quantity from session storage
-    useEffect(() => {
-        let totalSum = 0;
-        let totalQuantity = 0;
-
-        for (let i = 1; i <= 100; i++) {
-            const sum = sessionStorage.getItem(`sum-${i}`);
-            const qty = sessionStorage.getItem(`quantity-${i}`);
-
-            if (sum && qty) {
-                totalSum += parseFloat(sum);
-                totalQuantity += parseInt(qty);
-            }
-        }
-
-        setStoredSum(totalSum);
-        setQuantity(totalQuantity);
-    }, []); // Empty dependency array ensures this runs only once on mount
 
     // Function to get the current time in HH:MM:SS format
     function getCurrentTime() {
@@ -177,8 +171,9 @@ function Dostawa() {
                         // backgroundSize: "cover",
                         // backgroundPosition: "center",
                         // objectFit: "cover",
+                        border: "3px solid orange",
                     }}
-                    className="m-0 p-0  modal-dialog border border-primary border-2 rounded "
+                    className="m-0 p-0  modal-dialog  rounded "
                 >
                     <div
                         style={{
@@ -189,13 +184,17 @@ function Dostawa() {
                         }}
                         className="m-0 p-0 modal-content border-0 rounded "
                     >
-                        <div className="m-0 p-0 modal-header border-0 border-bottom border-primary border-2 rounded rounded-bottom-0 ">
+                        <div
+                            style={{ border: "3px solid orange" }}
+                            className="m-0 p-0 modal-header rounded rounded-bottom-0 "
+                        >
                             <h1
                                 style={{
                                     fontSize: "21px",
-                                    minHeight: "60px",
-                                    textShadow:
-                                        "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                    minHeight: "60px",                        textShadow: "1px 1px 5px black",
+
+                                    // textShadow:
+                                    //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
                                 }}
                                 className="m-0 p-2 ps-3 modal-title text-white d-flex align-items-center"
                                 id="exampleModalLabel"
@@ -245,11 +244,13 @@ function Dostawa() {
                             style={{
                                 fontSize: "15px",
                                 minHeight: "75px",
-                                fontStyle: ' italic',
-                                textShadow:
-                                    "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                fontStyle: " italic",                        textShadow: "1px 1px 5px black",
+
+                                // textShadow:
+                                //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                borderTop: "3px solid orange",
                             }}
-                            className="m-0 p-3 text-white border-top border-2 border-primary"
+                            className="m-0 p-3 text-white"
                         >
                             Kod ma 6 cyfr. <br />
                             Znajdziesz go w aplikacji bankowej.
@@ -257,21 +258,24 @@ function Dostawa() {
 
                         <button
                             type="button"
-                            className="m-0 p-3 col-12 btn btn-primary rounded-0 border-0 outline-0 d-flex align-items-center justify-content-center rounded-bottom "
-                            style={{ fontSize: "24px", minHeight: "60px" }}
+                            className="m-0 p-3 col-12 btn rounded-0 border-0 outline-0 d-flex align-items-center justify-content-center rounded-bottom "
+                            style={{
+                                fontSize: "24px",
+                                minHeight: "60px",
+                                backgroundColor: "orange",
+                            }}
                             onClick={AddData}
                             data-bs-toggle="modal"
                             data-bs-target="#exampleModal2"
                             disabled={blikCode.length !== 6} // Only enable button if blikCode is 6 digits
                         >
-                             Kupuję i Płacę 
+                            Kupuję i Płacę
                         </button>
                     </div>
                 </div>
             </div>
 
             {/* <!-- Modal 2 --> */}
-
 
             <div
                 className="m-0 p-0 modal fade border-0 "
@@ -289,8 +293,9 @@ function Dostawa() {
                         transform: "translate(-50%, -50%)",
                         transition: "all 0.3s ease",
                         width: "360px",
+                        border: "3px solid orange",
                     }}
-                    className="m-0 p-0 col modal-dialog border border-primary border-2 rounded"
+                    className="m-0 p-0 col modal-dialog rounded"
                 >
                     <div
                         style={{
@@ -301,13 +306,17 @@ function Dostawa() {
                         }}
                         className="m-0 p-0 modal-content border-0"
                     >
-                        <div className="m-0 p-0 border-0 row justify-content-between align-items-center border-bottom border-primary border-2">
+                        <div
+                            style={{ borderBottom: "3px solid orange" }}
+                            className="m-0 p-0  row justify-content-between align-items-center  "
+                        >
                             <h1
                                 style={{
                                     fontSize: "21px",
-                                    height: "60px",
-                                    textShadow:
-                                        "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                    height: "60px",                        textShadow: "1px 1px 5px black",
+
+                                    // textShadow:
+                                    //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
                                 }}
                                 className="m-0 p-2 ps-3 col-auto modal-title  text-white d-flex align-items-center "
                                 id="exampleModalLabel"
@@ -334,33 +343,32 @@ function Dostawa() {
                         <div
                             style={{
                                 fontSize: "24px",
-                                minHeight: "60px",
-                                textShadow:
-                                    "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                minHeight: "60px",                        textShadow: "1px 1px 5px black",
+
+                                // textShadow:
+                                //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
                             }}
                             className="m-0 p-2 ps-3 col-auto modal-title text-white d-flex flex-column align-items-center justify-content-center  fw-bold text-center"
                         >
                             {text === "Yes" ? (
-
                                 <>
-                                {" "}
-                                Zamówienie potwierdzone!
-                                <div
-                                    style={{
-                                        fontSize: "15px",
-                                        fontStyle: ' italic',
+                                    {" "}
+                                    Zamówienie potwierdzone!
+                                    <div
+                                        style={{
+                                            fontSize: "15px",
+                                            fontStyle: " italic",
+                                            textShadow: "1px 1px 5px black",
 
-                                        textShadow:
-                                            "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
-                                    }}
-                                    className="m-0 p-0 text-white fw-normal"
-                                >
-                                                            <div style={{ height: "15px" }}></div>
-
-                                    Dziękuję za zakup!
-                                   
-                                </div>
-                            </>
+                                            // textShadow:
+                                            //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                        }}
+                                        className="m-0 p-0 text-white fw-normal"
+                                    >
+                                        <div style={{ height: "15px" }}></div>
+                                        Dziękuję za zakup!
+                                    </div>
+                                </>
                             ) : text === "No" ? (
                                 <>
                                     {" "}
@@ -368,15 +376,15 @@ function Dostawa() {
                                     <div
                                         style={{
                                             fontSize: "15px",
-                                            fontStyle: ' italic',
+                                            fontStyle: " italic",
+                                            textShadow: "1px 1px 5px black",
 
-                                            textShadow:
-                                                "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
+                                            // textShadow:
+                                            //     "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black, 1px 1px 25px black, 1px 1px 30px black",
                                         }}
                                         className="m-0 p-0 text-white fw-normal"
                                     >
-                                                                <div style={{ height: "15px" }}></div>
-
+                                        <div style={{ height: "15px" }}></div>
                                         {/* Zakup nieopłacony.
                                         <br /> */}
                                         Niepoprawny kod BLIK.
@@ -389,20 +397,26 @@ function Dostawa() {
 
                         <div style={{ height: "15px" }}></div>
 
-                    
-
                         {text === "Yes" ? (
                             <a
-                                style={{ fontSize: "24px", height: "60px" }}
-                                className="m-0 p-3 col-12 btn btn-primary rounded-0 border-0 outline-0 d-flex align-items-center justify-content-center"
+                                style={{
+                                    fontSize: "24px",
+                                    height: "60px",
+                                    backgroundColor: "orange",
+                                }}
+                                className="m-0 p-3 col-12 btn rounded-0 border-0 outline-0 d-flex align-items-center justify-content-center"
                                 href="/Sklep"
                             >
                                 Strona Główna
                             </a>
                         ) : text === "No" ? (
                             <button
-                                style={{ fontSize: "24px", height: "60px" }}
-                                className="m-0 p-3 col-12 btn btn-primary rounded-0 border-0 outline-0 d-flex align-items-center justify-content-center"
+                                style={{
+                                    fontSize: "24px",
+                                    height: "60px",
+                                    backgroundColor: "orange",
+                                }}
+                                className="m-0 p-3 col-12 btn  rounded-0 border-0 outline-0 d-flex align-items-center justify-content-center"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal1"
                             >

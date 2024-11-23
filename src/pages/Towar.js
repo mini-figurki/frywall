@@ -20,62 +20,77 @@ const Towar = () => {
     const acsesoria = queryParams.get("acsesoria");
     const producent = queryParams.get("producent");
 
+    const orange = queryParams.get("orange");
+    const red = queryParams.get("red");
+    const black = queryParams.get("black");
+    const green = queryParams.get("green");
+    const gray = queryParams.get("gray");
+    const blue = queryParams.get("blue");
+
     const [quantity, setQuantity] = useState(1);
     const [sum, setSum] = useState(price);
 
     // useEffect to initialize stored values from sessionStorage
-    useEffect(() => {
-        const storedSum = sessionStorage.getItem(`sum-${id}`);
-        const storedQuantity = sessionStorage.getItem(`quantity-${id}`);
+    // useEffect(() => {
+    //     const storedSum = sessionStorage.getItem(`sum-${selectedColor}-${id}`);
+    //     const storedQuantity = sessionStorage.getItem(`quantity-${selectedColor}-${id}`);
 
-        if (storedSum) {
-            setSum(Number(storedSum)); // Ensure sum is a number
-        }
+    //     if (storedSum) {
+    //         setSum(Number(storedSum)); // Ensure sum is a number selectedColor
+    //     }
 
-        if (storedQuantity) {
-            setQuantity(Number(storedQuantity)); // Ensure quantity is a number
-        }
-    }, [id]); // This effect runs only when `id` changes (initialization)
+    //     if (storedQuantity) {
+    //         setQuantity(Number(storedQuantity)); // Ensure quantity is a number
+    //     }
+    // }, [id]); // This effect runs only when `id` changes (initialization)
 
     // useEffect to listen for changes in sessionStorage
-    useEffect(() => {
-        const handleStorageChange = () => {
-            const storedQuantity = sessionStorage.getItem(`quantity-${id}`);
-            if (storedQuantity) {
-                setQuantity(Number(storedQuantity)); // Update quantity from sessionStorage
-            }
+    // useEffect(() => {
+    //     const handleStorageChange = () => {
+    //         const storedQuantity = sessionStorage.getItem(`quantity-${id}`);
+    //         if (storedQuantity) {
+    //             setQuantity(Number(storedQuantity)); // Update quantity from sessionStorage
+    //         }
 
-            const storedSum = sessionStorage.getItem(`sum-${id}`);
-            if (storedSum) {
-                setSum(Number(storedSum)); // Update sum from sessionStorage
-            }
-        };
+    //         const storedSum = sessionStorage.getItem(`sum-${id}`);
+    //         if (storedSum) {
+    //             setSum(Number(storedSum)); // Update sum from sessionStorage
+    //         }
+    //     };
 
-        // Listen for changes in sessionStorage
-        window.addEventListener("storage", handleStorageChange);
+    //     // Listen for changes in sessionStorage
+    //     window.addEventListener("storage", handleStorageChange);
 
-        // Cleanup the event listener when component is unmounted or id changes
-        return () => {
-            window.removeEventListener("storage", handleStorageChange);
-        };
-    }, [id]); // This effect will rerun if the `id` changes, ensuring the listener is reattached for each new item.
+    //     // Cleanup the event listener when component is unmounted or id changes
+    //     return () => {
+    //         window.removeEventListener("storage", handleStorageChange);
+    //     };
+    // }, [id]); // This effect will rerun if the `id` changes, ensuring the listener is reattached for each new item.
 
     // Update `sum` whenever `quantity` or `price` changes
     useEffect(() => {
         // Calculate the sum when price or quantity changes
         setSum(price * quantity);
-    }, [price, quantity]); // Only trigger this effect on `price` or `quantity` changes
+        if (selectedColor == 'Kolor') {
+            if (image == red) setSelectedColor("Czerwony");
+            else if (image == orange) setSelectedColor("Pomarańczowy");
+            else if (image == green) setSelectedColor("Zielony");
+            else if (image == gray) setSelectedColor("Szary");
+            else if (image == black) setSelectedColor("Czarny");
+            else if (image == blue) setSelectedColor("Niebieski");
+        }
+    }, ); // Only trigger this effect on `price` or `quantity` changes
 
     function buy() {
         // Retrieve the existing quantity from sessionStorage or default to 0
         const storedQuantity =
-            parseInt(sessionStorage.getItem(`quantity-${id}`)) || 0;
+            parseInt(sessionStorage.getItem(`quantity-${selectedColor}-${id}`)) || 0;
         let newQuantity;
 
         // Add the current quantity to the stored quantity (no multiplication by 2)
         if (storedQuantity !== quantity) {
             // If storedQuantity is different, set newQuantity to current quantity
-            newQuantity = quantity;
+            newQuantity = storedQuantity + quantity;
         } else {
             // If they are equal, increment the stored quantity by 1
             newQuantity = storedQuantity + 1;
@@ -84,17 +99,23 @@ const Towar = () => {
         // Calculate the total sum based on the new quantity
         const newSum = price * newQuantity;
 
+
+        
+
+
         // Update the state and sessionStorage with the new values
         setSum(newSum);
-        sessionStorage.setItem(`quantity-${id}`, newQuantity); // Store the new quantity
-        sessionStorage.setItem(`sum-${id}`, newSum); // Store the new sum
-        sessionStorage.setItem(`id-${id}`, id);
-        sessionStorage.setItem(`name-${id}`, name);
-        sessionStorage.setItem(`image-${id}`, image);
-        sessionStorage.setItem(`price-${id}`, price);
+        sessionStorage.setItem(`quantity-${selectedColor}-${id}`, newQuantity); // Store the new quantity
+        sessionStorage.setItem(`sum-${selectedColor}-${id}`, newSum); // Store the new sum
+        sessionStorage.setItem(`id-${selectedColor}-${id}`, id);
+        sessionStorage.setItem(`name-${selectedColor}-${id}`, name);
+        sessionStorage.setItem(`image-${selectedColor}-${id}`, currentImg);
+        sessionStorage.setItem(`price-${selectedColor}-${id}`, price);
+
+
 
         // Reflect the updated quantity in the component's state
-        setQuantity(newQuantity);
+        setQuantity(1);
     }
 
     function decrement() {
@@ -106,6 +127,30 @@ const Towar = () => {
     function increment() {
         setQuantity(quantity + 1);
     }
+
+    const [selectedColor, setSelectedColor] = useState("Kolor");
+    const [currentImg, setCurrentImg] = useState(image); // Set a default image or placeholder
+
+    const handleColorChange = (color) => {
+        setSelectedColor(color);
+
+        // Update the image based on the selected color
+        if (color === "Czerwony") {
+            setCurrentImg(red);
+        } else if (color === "Pomarańczowy") {
+            setCurrentImg(orange);
+        } else if (color === "Zielony") {
+            setCurrentImg(green);
+        } else if (color === "Szary") {
+            setCurrentImg(gray);
+        } else if (color === "Czarny") {
+            setCurrentImg(black);
+        } else if (color === "Niebieski") {
+            setCurrentImg(blue);
+        } else {
+            setCurrentImg(image); // Reset to default if no matching color
+        }
+    };
 
     return (
         <div
@@ -142,9 +187,13 @@ const Towar = () => {
                     className=" p-0 col-auto d-flex justify-content-center "
                 >
                     <img
-                        style={{ maxWidth: "720px", width: "100%" }}
-                        src={image}
-                        className="m-0 p-0 border border-2 border-primary rounded"
+                        style={{
+                            maxWidth: "720px",
+                            width: "100%",
+                            border: "4px solid orange",
+                        }}
+                        src={currentImg}
+                        className="m-0 p-0  rounded"
                         alt={name}
                     />
                     <div
@@ -154,11 +203,10 @@ const Towar = () => {
                             right: "2px",
                             backdropFilter: "blur(3px)",
                             height: "30px",
-                            width: '80px'
-                        }} className="m-0 p-0 rounded"
-                    >
-                        
-                    </div>
+                            width: "80px",
+                        }}
+                        className="m-0 p-0 rounded"
+                    ></div>
                 </div>
 
                 <div
@@ -170,25 +218,13 @@ const Towar = () => {
                         // marginBottom: "30px",
                         padding: "15px",
                         paddingTop: "30px",
+                        // border: "4px solid orange",
                     }}
-                    className=" col-auto row justify-content-between align-items-center border border-2 border-primary rounded"
+                    className=" col-auto row justify-content-between align-items-center  rounded"
                 >
-                    {/* <div style={{ height: "15px", }}></div> */}
-
-                    {/* <div
-                        style={{
-                            fontSize: "36px",
-                            height: "60px",
-                            marginBottom: "30px",
-                        }}
-                        className=" p-0 col-12 col-sm text-white  d-flex align-items-center justify-content-center fw-bold"
-                    >
-                        {name}
-                    </div> */}
-
                     <div
                         style={{ minWidth: "150px" }}
-                        className="m-0 p-0 col row justify-content-center align-items-center"
+                        className="m-0 p-0 col-12 row justify-content-center align-items-center"
                     >
                         <div
                             style={{
@@ -197,10 +233,119 @@ const Towar = () => {
                                 minHeight: "60px",
                                 marginBottom: "30px",
                             }}
-                            className="p-0 ps-3 pe-3 col-auto  text-white  d-flex align-items-center justify-content-center fw-bold border-bottom border-4 border-primary"
+                            className="p-0 ps-3 pe-3 col-auto  text-white text-center d-flex align-items-center justify-content-center fw-bold"
                         >
                             {name}
                         </div>
+                    </div>
+
+                    <div
+                        style={{ minWidth: "150px" }}
+                        className="dropdown m-0 p-0 col row justify-content-center"
+                    >
+                        <button
+                            className=" p-0 btn dropdown-toggle text-white fw-bold"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            style={{
+                                backgroundColor: "orange",
+                                height: "45px",
+                                marginBottom: "30px",
+                                fontSize: "21px",
+                            }}
+                        >
+                            {selectedColor}
+                        </button>
+                        <ul
+                            style={{ backgroundColor: "orange" }}
+                            className="m-0 p-2 dropdown-menu"
+                        >
+                            {red != 0 && (
+                                <li>
+                                    <a
+                                        style={{ fontSize: "18px" }}
+                                        className="dropdown-item m-0 p-2 "
+                                        href="#"
+                                        onClick={() =>
+                                            handleColorChange("Czerwony")
+                                        }
+                                    >
+                                        Czerwony
+                                    </a>
+                                </li>
+                            )}{" "}
+                            {orange != 0 && (
+                                <li>
+                                    <a
+                                        style={{ fontSize: "18px" }}
+                                        className="dropdown-item m-0 p-2"
+                                        href="#"
+                                        onClick={() =>
+                                            handleColorChange("Pomarańczowy")
+                                        }
+                                    >
+                                        Pomarańczowy
+                                    </a>
+                                </li>
+                            )}
+                            {green != 0 && (
+                                <li>
+                                    <a
+                                        style={{ fontSize: "18px" }}
+                                        className="dropdown-item m-0 p-2"
+                                        href="#"
+                                        onClick={() =>
+                                            handleColorChange("Zielony")
+                                        }
+                                    >
+                                        Zielony
+                                    </a>
+                                </li>
+                            )}
+                            {blue != 0 && (
+                                <li>
+                                    <a
+                                        style={{ fontSize: "18px" }}
+                                        className="dropdown-item m-0 p-2"
+                                        href="#"
+                                        onClick={() =>
+                                            handleColorChange("Niebieski")
+                                        }
+                                    >
+                                        Niebieski
+                                    </a>
+                                </li>
+                            )}
+                            {gray != 0 && (
+                                <li>
+                                    <a
+                                        style={{ fontSize: "18px" }}
+                                        className="dropdown-item m-0 p-2"
+                                        href="#"
+                                        onClick={() =>
+                                            handleColorChange("Szary")
+                                        }
+                                    >
+                                        Szary
+                                    </a>
+                                </li>
+                            )}
+                            {black != 0 && (
+                                <li>
+                                    <a
+                                        style={{ fontSize: "18px" }}
+                                        className="dropdown-item m-0 p-2"
+                                        href="#"
+                                        onClick={() =>
+                                            handleColorChange("Czarny")
+                                        }
+                                    >
+                                        Czarny
+                                    </a>
+                                </li>
+                            )}
+                        </ul>
                     </div>
 
                     <div
@@ -254,7 +399,7 @@ const Towar = () => {
                                 margin: 0,
                                 padding: "0px 12px",
                                 display: "flex",
-                                width: "auto",
+                                minWidth: "45px",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 textAlign: "center",
@@ -314,8 +459,9 @@ const Towar = () => {
                                 fontStyle: "italic",
                                 minHeight: "60px",
                                 marginBottom: "30px",
+                                borderBottom: "6px solid orange",
                             }}
-                            className="p-0 ps-3 pe-3 col-auto  text-white  d-flex align-items-center justify-content-center fw-bold border-bottom border-4 border-primary"
+                            className="p-0 ps-3 pe-3 col-auto  text-white  d-flex align-items-center justify-content-center fw-bold "
                         >
                             {sum} zł
                         </div>
@@ -359,9 +505,72 @@ const Towar = () => {
                         }}
                         className="m-0 p-0 text-white"
                     >
-                        &nbsp; {text}
+                    <span style={{backgroundColor: 'orange'}} className="m-0 p-1 ps-2 pe-2 rounded-pill fw-bold">1.</span>    &nbsp; {text}
                     </div>
-
+                    <div
+                        style={{ height: "10px" }}
+                        className="m-0 p-0 col-12"
+                    ></div>
+                    <div
+                        style={{
+                            fontSize: "18px",
+                            fontStyle: "italic",
+                            textAlign: "justify",
+                            textShadow:
+                                "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black,",
+                        }}
+                        className="m-0 p-0 text-white"
+                    >
+                     <span style={{backgroundColor: 'orange'}} className="m-0 p-1 ps-2 pe-2 rounded-pill fw-bold">2.</span>   &nbsp; {material}
+                    </div>
+                    <div
+                        style={{ height: "10px" }}
+                        className="m-0 p-0 col-12"
+                    ></div>
+                    <div
+                        style={{
+                            fontSize: "18px",
+                            fontStyle: "italic",
+                            textAlign: "justify",
+                            textShadow:
+                                "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black,",
+                        }}
+                        className="m-0 p-0 text-white"
+                    >
+                   <span style={{backgroundColor: 'orange'}} className="m-0 p-1 ps-2 pe-2 rounded-pill fw-bold">3.</span>     &nbsp; {ruch}
+                    </div>
+                    <div
+                        style={{ height: "10px" }}
+                        className="m-0 p-0 col-12"
+                    ></div>
+                    <div
+                        style={{
+                            fontSize: "18px",
+                            fontStyle: "italic",
+                            textAlign: "justify",
+                            textShadow:
+                                "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black,",
+                        }}
+                        className="m-0 p-0 text-white"
+                    >
+                     <span style={{backgroundColor: 'orange'}} className="m-0 p-1 ps-2 pe-2 rounded-pill fw-bold">4.</span>   &nbsp; {acsesoria}
+                    </div>
+                    <div
+                        style={{ height: "10px" }}
+                        className="m-0 p-0 col-12"
+                    ></div>
+                    <div
+                        style={{
+                            fontSize: "18px",
+                            fontStyle: "italic",
+                            textAlign: "justify",
+                            textShadow:
+                                "1px 1px 10px black, 1px 1px 15px black, 1px 1px 20px black,",
+                        }}
+                        className="m-0 p-0 text-white"
+                    >
+                        <span style={{backgroundColor: 'orange'}} className="m-0 p-1 ps-2 pe-2 rounded-pill fw-bold">5.</span> &nbsp; {producent}
+                    </div>
                     <div
                         style={{ height: "25px" }}
                         className="m-0 p-0 col-12"
@@ -372,16 +581,18 @@ const Towar = () => {
                             fontSize: "18px",
                             fontStyle: "italic",
                             minHeight: "45px",
-                            width: "180px",
+                            width: "auto",
                             backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                             margin: "5px",
+                            border: "3px solid orange",
                         }}
-                        className=" p-1 ps-2 text-white  d-flex align-items-center justify-content-center border border-2 border-primary rounded"
+                        className=" p-1 ps-2 text-white  d-flex align-items-center justify-content-center rounded"
                     >
-                        Wysokość: <b className="m-0 p-0 ps-2 pe-2"> {height}</b>
+                        Do patelni o średnicy:{" "}
+                        <b className="m-0 p-0 ps-2 pe-2"> {height}</b>
                     </div>
 
-                    <div
+                    {/* <div
                         style={{
                             fontSize: "18px",
                             fontStyle: "italic",
@@ -389,13 +600,15 @@ const Towar = () => {
                             width: "180px",
                             backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                             margin: "5px",
+                            border: "3px solid orange",
                         }}
-                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center border border-2 border-primary rounded"
+                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center rounded"
                     >
-                        Materiał: <b className="m-0 p-0 ps-2 pe-2"> {material}</b>
-                    </div>
+                        Materiał:{" "}
+                        <b className="m-0 p-0 ps-2 pe-2"> {material}</b>
+                    </div> */}
 
-                    <div
+                    {/* <div
                         style={{
                             fontSize: "18px",
                             fontStyle: "italic",
@@ -403,14 +616,15 @@ const Towar = () => {
                             backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                             width: "240px",
                             margin: "5px",
+                            border: "3px solid orange",
                         }}
-                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center border border-2 border-primary rounded"
+                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center  rounded"
                     >
                         Zakres ruchu:
                         <b className="m-0 p-0 ps-2 pe-2"> {ruch} </b>
-                    </div>
+                    </div> */}
 
-                    <div
+                    {/* <div
                         style={{
                             fontSize: "18px",
                             fontStyle: "italic",
@@ -418,14 +632,15 @@ const Towar = () => {
                             backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                             width: "270px",
                             margin: "5px",
+                            border: "3px solid orange",
                         }}
-                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center border border-2 border-primary rounded"
+                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center  rounded"
                     >
                         Akcesoria w zestawie:
                         <b className="m-0 p-0 ps-2 pe-2"> {acsesoria} </b>
-                    </div>
+                    </div> */}
 
-                    <div
+                    {/* <div
                         style={{
                             fontSize: "18px",
                             fontStyle: "italic",
@@ -433,11 +648,13 @@ const Towar = () => {
                             backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                             width: "280px",
                             margin: "5px",
+                            border: "3px solid orange",
                         }}
-                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center border border-2 border-primary rounded"
+                        className="p-1 ps-2 text-white  d-flex align-items-center justify-content-center rounded"
                     >
-                        Producent: <b className="m-0 p-0 ps-2 pe-2"> {producent}</b>
-                    </div>
+                        Producent:{" "}
+                        <b className="m-0 p-0 ps-2 pe-2"> {producent}</b>
+                    </div> */}
 
                     <div style={{ height: "10px" }} className="m-0 p-0"></div>
                 </div>

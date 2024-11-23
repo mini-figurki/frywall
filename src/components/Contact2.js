@@ -58,9 +58,10 @@ const Contact2 = ({ img }) => {
 
                                 backgroundColor: "hsla(0, 0%, 0%, 0.5)",
                                 textShadow:
-                                    "1px 1px 10px black, 1px 1px 30px black",
+                                    "1px 1px 10px black, 1px 1px 30px black",                                border: '3px solid orange'
+
                             }}
-                            className=" p-1 ps-3 pe-3 d-flex align-items-center justify-content-start border border-2 border-primary fw-bold rounded"
+                            className=" p-1 ps-3 pe-3 d-flex align-items-center justify-content-start fw-bold rounded"
                         >
                             {item}
                         </div>
@@ -69,7 +70,7 @@ const Contact2 = ({ img }) => {
 
                 {/* Map Section */}
                 <div
-                    className=" p-0 col border border-2 border-primary rounded"
+                    className=" p-0 col  rounded"
                     style={{
                         // width: "360px",
                         backgroundColor: "hsla(0, 0%, 0%, 0,25)",
@@ -79,7 +80,8 @@ const Contact2 = ({ img }) => {
 
                         maxWidth: "780px",
                         minWidth: "240px",
-                        height: "480px",
+                        height: "480px",                                border: '3px solid orange'
+
                     }}
                 >
                     <iframe
